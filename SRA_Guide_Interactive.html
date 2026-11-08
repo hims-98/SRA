@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solar Resource Assessment Guide</title>
+<style>
+:root{
+  --ink:#16191d; --muted:#5a6470; --faint:#8a929c; --line:#e5e7ea; --bg:#ffffff; --soft:#f6f7f5; --soft2:#eef3f2;
+  --accent:#0f5c57; --accent2:#13807a; --sun:#c98102; --sunbg:#fdf5e3; --red:#b0412b; --redbg:#fbecea; --green:#2b7a4b; --greenbg:#e9f5ee; --blue:#2a5a9e;
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15.5px;line-height:1.6}
+a{color:var(--accent)}
+.layout{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+nav.side{position:sticky;top:0;height:100vh;overflow:auto;border-right:1px solid var(--line);padding:28px 18px;background:#fff}
+nav.side .brand{font-family:var(--serif);font-size:19px;line-height:1.25;margin-bottom:4px}
+nav.side .sub{font-size:12px;color:var(--faint);margin-bottom:22px;text-transform:uppercase;letter-spacing:.08em}
+nav.side a{display:block;text-decoration:none;color:var(--muted);font-size:13.5px;padding:6px 10px;border-radius:6px;margin:1px 0}
+nav.side a .n{display:inline-block;width:22px;color:var(--faint);font-variant-numeric:tabular-nums}
+nav.side a:hover{background:var(--soft)}
+nav.side a.active{background:var(--soft2);color:var(--accent);font-weight:600}
+nav.side .lvl{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.08em;margin:16px 10px 4px}
+main{max-width:1020px;padding:0 48px 80px;min-width:0}
+.grid2>*,.grid3>*,.grid4>*,.tool,.tool-b{min-width:0}
+header.hero{padding:56px 0 30px;border-bottom:1px solid var(--line)}
+.kicker{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--sun);font-weight:700}
+h1{font-family:var(--serif);font-weight:400;font-size:42px;line-height:1.12;margin:10px 0 14px}
+h2{font-family:var(--serif);font-weight:400;font-size:30px;line-height:1.2;margin:0 0 6px}
+h3{font-size:17px;margin:26px 0 8px}
+h4{font-size:14px;margin:14px 0 6px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.lede{font-size:18px;color:var(--muted);max-width:760px}
+section{padding:54px 0 10px;border-bottom:1px solid var(--line)}
+.sec-num{font-family:var(--serif);color:var(--sun);font-size:15px;margin-bottom:2px}
+.level{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;background:var(--soft);color:var(--muted);margin-left:8px;vertical-align:middle;font-family:var(--sans);letter-spacing:.04em}
+p{margin:10px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.card{border:1px solid var(--line);border-radius:10px;padding:16px 18px;background:#fff}
+.card.soft{background:var(--soft);border-color:transparent}
+.card h3{margin-top:0}
+.stat{font-family:var(--serif);font-size:30px;line-height:1.1;color:var(--accent)}
+.stat small{font-size:14px;color:var(--muted);font-family:var(--sans)}
+.statlbl{font-size:12.5px;color:var(--muted)}
+.callout{border-left:3px solid var(--sun);background:var(--sunbg);padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0;font-size:14.5px}
+.callout.teal{border-color:var(--accent);background:var(--soft2)}
+.callout.red{border-color:var(--red);background:var(--redbg)}
+.callout b{color:var(--ink)}
+.tool{border:1px solid var(--line);border-radius:12px;margin:22px 0;overflow:hidden;background:#fff}
+.tool-h{display:flex;align-items:center;gap:10px;padding:12px 18px;background:var(--soft);border-bottom:1px solid var(--line)}
+.tool-h .tag{font-size:11px;background:var(--accent);color:#fff;padding:2px 8px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase}
+.tool-h .t{font-weight:600}
+.tool-b{padding:18px}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px 18px;margin-bottom:14px}
+label.ctl{font-size:12.5px;color:var(--muted);display:block}
+label.ctl .v{float:right;color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--accent)}
+input[type=number],select,input[type=text]{width:100%;padding:6px 8px;border:1px solid var(--line);border-radius:6px;font:inherit;font-size:14px;background:#fff;color:var(--ink)}
+input[type=number]:focus,select:focus,input[type=text]:focus{outline:2px solid var(--accent2);outline-offset:-1px}
+button{font:inherit;font-size:13.5px;border:1px solid var(--accent);background:var(--accent);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer}
+button.ghost{background:#fff;color:var(--accent)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px}
+.chip{font-size:12.5px;border:1px solid var(--line);border-radius:20px;padding:4px 12px;cursor:pointer;background:#fff;color:var(--muted);user-select:none}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;background:var(--soft)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+td input[type=number]{padding:3px 6px;text-align:right;min-width:70px}
+.pill{display:inline-block;font-size:11.5px;padding:1px 8px;border-radius:20px;font-weight:600}
+.pill.g{background:var(--greenbg);color:var(--green)}
+.pill.a{background:var(--sunbg);color:var(--sun)}
+.pill.r{background:var(--redbg);color:var(--red)}
+.pill.b{background:#e8eef8;color:var(--blue)}
+.pill.n{background:var(--soft);color:var(--muted)}
+.ds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.ds{border:1px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;background:#fff;transition:border-color .15s, box-shadow .15s}
+.ds:hover{border-color:var(--accent2)}
+.ds.sel{border-color:var(--accent);box-shadow:0 0 0 2px var(--soft2)}
+.ds .nm{font-weight:650;font-size:15px}
+.ds .pv{font-size:12px;color:var(--faint);margin-bottom:6px}
+.ds .tags{display:flex;flex-wrap:wrap;gap:4px}
+.detail{margin-top:16px;border:1px solid var(--line);border-radius:10px;padding:18px;background:var(--soft)}
+.detail h3{margin:0 0 4px;font-family:var(--serif);font-weight:400;font-size:22px}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:4px 14px;font-size:14px;margin:10px 0}
+.kv div:nth-child(odd){color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:0;margin:18px 0}
+.flow .st{flex:1 1 150px;position:relative;padding:12px 14px 12px 14px;background:var(--soft);border:1px solid var(--line);margin:0 12px 10px 0;border-radius:8px;font-size:13.5px}
+.flow .st b{display:block;font-size:12px;color:var(--sun);letter-spacing:.06em;text-transform:uppercase}
+.svgwrap{width:100%;overflow:hidden}
+svg text{font-family:var(--sans)}
+.out{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0}
+.out .o{background:var(--soft);border-radius:8px;padding:10px 12px}
+.out .o .l{font-size:12px;color:var(--muted)}
+.out .o .v{font-family:var(--serif);font-size:24px;color:var(--ink);font-variant-numeric:tabular-nums}
+.out .o.hl{background:var(--soft2)}
+.out .o.hl .v{color:var(--accent)}
+.formula{font-family:var(--mono);font-size:12.5px;background:#fbfbfa;border:1px dashed var(--line);border-radius:6px;padding:8px 12px;color:var(--muted);margin:10px 0;overflow-x:auto;white-space:pre}
+details{border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:8px 0;background:#fff}
+details summary{cursor:pointer;font-weight:600}
+details[open] summary{margin-bottom:6px}
+ul.tight{margin:6px 0;padding-left:20px} ul.tight li{margin:3px 0}
+.check li{list-style:none;margin-left:-20px}
+.check input{margin-right:8px;accent-color:var(--accent)}
+.gl-item{padding:10px 0;border-bottom:1px solid var(--line)}
+.gl-item b{font-size:14.5px}
+.gl-item span{color:var(--muted);font-size:14px}
+.muted{color:var(--muted)} .small{font-size:13px}
+.note{font-size:12.5px;color:var(--faint);margin-top:8px}
+.scroll{overflow-x:auto}
+.menu-btn{display:none}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr}
+  nav.side{position:fixed;z-index:20;left:0;top:0;width:260px;transform:translateX(-100%);transition:transform .2s;box-shadow:2px 0 18px rgba(0,0,0,.08)}
+  nav.side.open{transform:none}
+  .menu-btn{display:block;position:fixed;top:12px;right:12px;z-index:30}
+  main{padding:0 16px 60px}
+  h1{font-size:31px}
+  .grid2,.grid3,.grid4{grid-template-columns:1fr}
+  .kv{grid-template-columns:1fr}
+}
+@media print{nav.side,.menu-btn{display:none}.layout{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<button class="menu-btn" onclick="document.querySelector('nav.side').classList.toggle('open')">☰ Contents</button>
+<div class="layout">
+<nav class="side" id="sidenav">
+  <div class="brand">Solar Resource Assessment</div>
+  <div class="sub">TDD field guide · India</div>
+  <div class="lvl">Foundation</div>
+  <a href="#why"><span class="n">01</span>Why SRA decides the deal</a>
+  <a href="#basics"><span class="n">02</span>Sunlight 101: GHI, DNI, DHI, GTI</a>
+  <a href="#sources"><span class="n">03</span>Where the data comes from</a>
+  <div class="lvl">The databases</div>
+  <a href="#datasets"><span class="n">04</span>Dataset explorer</a>
+  <a href="#accuracy"><span class="n">05</span>What paid data buys you</a>
+  <a href="#tmy"><span class="n">06</span>TMY vs time series</a>
+  <div class="lvl">Advanced</div>
+  <a href="#uncertainty"><span class="n">07</span>Uncertainty, P50 &amp; P90</a>
+  <a href="#compare"><span class="n">08</span>Multi-source comparison</a>
+  <a href="#ourview"><span class="n">09</span>Our View: nearby-plant benchmark</a>
+  <a href="#workflow"><span class="n">10</span>SRA workflow in a TDD</a>
+  <a href="#glossary"><span class="n">11</span>Glossary</a>
+</nav>
+
+<main>
+<header class="hero">
+  <div class="kicker">Technical Due Diligence · Resource Assessment</div>
+  <h1>Solar Resource Assessment, from first principles to a defensible TDD opinion</h1>
+  <p class="lede">What the resource team is actually doing when they talk about TMY, Solargis, Prospect, Meteonorm and PVGIS — why some datasets are used and others rejected, what you pay for with commercial data, how P50/P90 is built, and how our own operating plants become an independent check on any developer's numbers.</p>
+  <div class="grid4" style="margin-top:22px">
+    <div class="card soft"><div class="stat">≈1:1</div><div class="statlbl">A 1% error in irradiance becomes roughly a 1% error in energy and revenue</div></div>
+    <div class="card soft"><div class="stat">±4–8<small>%</small></div><div class="statlbl">Typical range of satellite-model uncertainty for annual GHI; India sits at the harder end because of aerosols</div></div>
+    <div class="card soft"><div class="stat">P90</div><div class="statlbl">The number lenders size debt on — built from resource uncertainty, not just the average</div></div>
+    <div class="card soft"><div class="stat">5</div><div class="statlbl">Interactive tools in this guide: transposition, dataset picker, P-value, comparator, nearby-plant benchmark</div></div>
+  </div>
+</header>
+
+<!-- 01 WHY -->
+<section id="why">
+  <div class="sec-num">01</div>
+  <h2>Why SRA decides the deal <span class="level">Foundation</span></h2>
+  <p>Every solar project's revenue model sits on one chain: <b>sunlight → energy → revenue → debt</b>. The energy yield assessment (usually run in PVsyst) takes a weather file as its single biggest input. If that file is 4% too optimistic, the plant under-delivers by roughly 4% every year for 25 years, and no amount of good engineering recovers it.</p>
+  <div class="flow">
+    <div class="st"><b>Step 1</b>Irradiance dataset (GHI, DHI, temperature) for the site</div>
+    <div class="st"><b>Step 2</b>Transposition to the module plane (GTI / POA)</div>
+    <div class="st"><b>Step 3</b>PV simulation: losses, temperature, clipping, availability</div>
+    <div class="st"><b>Step 4</b>P50 energy and uncertainty → P75 / P90 / P99</div>
+    <div class="st"><b>Step 5</b>Financial model: tariff × P90 → DSCR → debt sizing</div>
+  </div>
+  <p>In a TDD the developer (or seller) has already done steps 1–4. Our job is to answer three questions as an independent engineer:</p>
+  <div class="grid3">
+    <div class="card"><h3>Is the source right?</h3><p class="small muted">Was a credible, recent, validated dataset used — or the one that happened to give the highest number?</p></div>
+    <div class="card"><h3>Is the number right?</h3><p class="small muted">Do independent sources and real measured data near the site agree within an acceptable band?</p></div>
+    <div class="card"><h3>Is the uncertainty right?</h3><p class="small muted">Is the P90 built on a defensible uncertainty, or has uncertainty been understated to inflate P90?</p></div>
+  </div>
+  <div class="callout"><b>Lender's lens.</b> Banks size debt on P90 (sometimes one-year P99) energy. Two projects with the same P50 can carry very different debt if one has a 5% resource uncertainty and the other 8%. That is why "which dataset" and "what uncertainty" get argued so hard.</div>
+</section>
+
+<!-- 02 BASICS -->
+<section id="basics">
+  <div class="sec-num">02</div>
+  <h2>Sunlight 101: GHI, DNI, DHI, GTI <span class="level">Foundation</span></h2>
+  <p>Sunlight reaching the ground arrives in two ways: straight from the sun's disc (<b>beam / direct</b>) and scattered by the sky, clouds and aerosols (<b>diffuse</b>). Every dataset describes these components.</p>
+  <div class="grid2">
+    <div class="card">
+      <table>
+        <tr><th>Term</th><th>Meaning</th></tr>
+        <tr><td><b>GHI</b></td><td>Global Horizontal Irradiance — everything falling on a flat horizontal surface. The headline number every database publishes.</td></tr>
+        <tr><td><b>DNI</b></td><td>Direct Normal Irradiance — beam light on a surface always facing the sun. Key for trackers and CSP.</td></tr>
+        <tr><td><b>DHI</b></td><td>Diffuse Horizontal Irradiance — scattered sky light on a horizontal surface.</td></tr>
+        <tr><td><b>GTI / POA</b></td><td>Global Tilted Irradiance / Plane-of-Array — what actually reaches the tilted or tracking modules. This drives energy.</td></tr>
+      </table>
+      <div class="formula">GHI = DNI · cos(zenith) + DHI</div>
+    </div>
+    <div class="card">
+      <h4>Units that confuse people</h4>
+      <ul class="tight small">
+        <li><b>Irradiance</b> is power: W/m² (instantaneous, e.g. 1000 W/m² at noon).</li>
+        <li><b>Irradiation</b> is energy: kWh/m² over a day, month or year. Datasets report annual GHI in kWh/m²/yr.</li>
+        <li>India's utility belts typically see roughly <b>1,800–2,100 kWh/m²/yr</b> GHI; western Rajasthan and Kutch at the upper end, monsoon-heavy and coastal sites lower.</li>
+        <li>kWh/m²/day ÷ 1 kW/m² = "peak sun hours". 5.6 kWh/m²/day ≈ 2,045 kWh/m²/yr.</li>
+      </ul>
+      <h4>Why diffuse share matters</h4>
+      <p class="small">Two sites with identical GHI can produce different energy. A site with more diffuse light (haze, monsoon cloud) gains less from tilting and much less from tracking. That is why reviewers check DHI, not just GHI.</p>
+    </div>
+  </div>
+
+  <div class="tool" id="tool-transp">
+    <div class="tool-h"><span class="tag">Tool 1</span><span class="t">Transposition explorer — how GHI becomes GTI</span></div>
+    <div class="tool-b">
+      <div class="controls">
+        <label class="ctl">Latitude (°N) <span class="v" id="tLatV"></span><input type="range" id="tLat" min="8" max="34" step="0.5" value="26"></label>
+        <label class="ctl">Annual GHI (kWh/m²) <span class="v" id="tGhiV"></span><input type="range" id="tGhi" min="1600" max="2200" step="5" value="2000"></label>
+        <label class="ctl">Diffuse fraction DHI/GHI <span class="v" id="tKdV"></span><input type="range" id="tKd" min="0.20" max="0.60" step="0.01" value="0.36"></label>
+        <label class="ctl">Albedo <span class="v" id="tAlbV"></span><input type="range" id="tAlb" min="0.10" max="0.40" step="0.01" value="0.20"></label>
+        <label class="ctl">Mounting<select id="tMode"><option value="fixed">Fixed tilt, south-facing</option><option value="sat">Single-axis tracker (N-S, ±60°)</option></select></label>
+        <label class="ctl" id="tTiltWrap">Tilt (°) <span class="v" id="tTiltV"></span><input type="range" id="tTilt" min="0" max="40" step="1" value="22"></label>
+      </div>
+      <div class="out">
+        <div class="o hl"><div class="l">Annual GTI (kWh/m²)</div><div class="v" id="tOutGti">–</div></div>
+        <div class="o"><div class="l">Gain over GHI</div><div class="v" id="tOutGain">–</div></div>
+        <div class="o"><div class="l">Beam on plane</div><div class="v" id="tOutB">–</div></div>
+        <div class="o"><div class="l">Diffuse on plane</div><div class="v" id="tOutD">–</div></div>
+        <div class="o"><div class="l">Ground reflected</div><div class="v" id="tOutR">–</div></div>
+      </div>
+      <div class="svgwrap" id="tChart"></div>
+      <p class="note">Simplified isotropic-sky model on a clear-sky-shaped year, for intuition only. PVsyst uses Perez or Hay models with hourly data, which typically give a slightly higher diffuse contribution than isotropic. The tracker case is ideal tracking with no backtracking or row-to-row shading, so it overstates what a real Indian tracker plant achieves. Try raising the diffuse fraction and watch the tracker gain shrink.</p>
+    </div>
+  </div>
+  <div class="callout teal"><b>Reviewer's takeaway:</b> GTI is a <i>derived</i> number. Two consultants starting from the same GHI can land 1–2% apart on GTI just from the transposition model and diffuse split. Always compare like with like — GHI against GHI first, then check how GTI was derived.</div>
+</section>
+
+<!-- 03 SOURCES -->
+<section id="sources">
+  <div class="sec-num">03</div>
+  <h2>Where the data comes from <span class="level">Foundation</span></h2>
+  <p>There are only four ways to know how much sun a site receives. Every database name you hear is one of these, or a blend.</p>
+  <div class="grid2">
+    <div class="card"><h3>① Ground measurement</h3><p class="small">Pyranometers on a met mast or inside an operating plant. The most accurate for that exact spot <i>if</i> the sensor is high class, cleaned, calibrated and quality-controlled. Limitations: usually only 1–3 years long, and only valid at that location.</p><p class="small muted">Examples: on-site met station, plant SCADA pyranometers, NIWE SRRA stations, IMD radiation stations.</p></div>
+    <div class="card"><h3>② Satellite-derived models</h3><p class="small">Geostationary weather satellites photograph cloud cover every 10–30 minutes. A model converts "cloud brightness" into ground irradiance, using clear-sky physics plus aerosol and water-vapour inputs. Gives 15–25+ years of continuous time series anywhere.</p><p class="small muted">Examples: Solargis, NSRDB (NREL), CM SAF SARAH (used by PVGIS), SolarAnywhere, Vaisala.</p></div>
+    <div class="card"><h3>③ Interpolation of stations</h3><p class="small">Long-term monthly averages from thousands of weather stations, interpolated to the site and blended with satellite where stations are sparse. Hourly values are then <i>synthetically generated</i> from those monthly means.</p><p class="small muted">Example: Meteonorm.</p></div>
+    <div class="card"><h3>④ Reanalysis</h3><p class="small">Global weather-model output corrected with observations (ECMWF ERA5, NASA MERRA-2). Excellent for temperature, wind and long-term trends; coarse (~25–50 km) and weaker on clouds for irradiance.</p><p class="small muted">Examples: ERA5, MERRA-2, NASA POWER (built on these products).</p></div>
+  </div>
+  <h3>Why India is a hard place for satellite models</h3>
+  <div class="grid3">
+    <div class="card soft"><b>Aerosols</b><p class="small">Dust over Rajasthan and Gujarat in pre-monsoon, pollution and haze over the Indo-Gangetic plain, crop-burning smoke. Aerosols cut beam light and can't be seen well by the satellite, so the model depends on aerosol inputs (CAMS or climatology). This is the biggest single error source in India.</p></div>
+    <div class="card soft"><b>Monsoon &amp; fog</b><p class="small">June–September cloud regimes and north-Indian winter fog are highly variable year to year, raising inter-annual variability and making "typical year" choices tricky.</p></div>
+    <div class="card soft"><b>Satellite geometry</b><p class="small">India is viewed by the Meteosat Indian-Ocean satellite; the eastern states are seen at a slant, which degrades pixel quality. Fewer high-quality public ground stations also mean fewer validation points.</p></div>
+  </div>
+</section>
+
+<!-- 04 DATASETS -->
+<section id="datasets">
+  <div class="sec-num">04</div>
+  <h2>Dataset explorer <span class="level">The databases</span></h2>
+  <p>Click a dataset to see what it is, how it is built, and — most importantly — <b>why a TDD team uses it as primary, as a cross-check, or not at all</b>. Filter by cost and type.</p>
+  <div class="tool">
+    <div class="tool-h"><span class="tag">Tool 2</span><span class="t">Database cards &amp; selection logic</span></div>
+    <div class="tool-b">
+      <div class="chips" id="dsFilters">
+        <span class="chip on" data-f="all">All</span>
+        <span class="chip" data-f="paid">Paid</span>
+        <span class="chip" data-f="free">Free</span>
+        <span class="chip" data-f="Satellite">Satellite</span>
+        <span class="chip" data-f="Interpolation">Interpolation</span>
+        <span class="chip" data-f="Reanalysis">Reanalysis</span>
+        <span class="chip" data-f="Ground">Ground measured</span>
+      </div>
+      <div class="ds-grid" id="dsGrid"></div>
+      <div class="detail" id="dsDetail"></div>
+    </div>
+  </div>
+
+  <h3>The short version: who plays which role</h3>
+  <div class="scroll">
+  <table>
+    <tr><th>Role in TDD</th><th>Typical datasets</th><th>Reason</th></tr>
+    <tr><td><span class="pill g">Primary / bankable</span></td><td>Solargis Evaluate (time series + P50/P90 TMY); occasionally other validated commercial satellite data</td><td>Real multi-year time series to recent months, sub-hourly, validated, published uncertainty, widely accepted by lenders</td></tr>
+    <tr><td><span class="pill b">Cross-check</span></td><td>Meteonorm, PVGIS (SARAH-3), NREL NSRDB India, SolarAnywhere</td><td>Independent methods; agreement across them builds confidence, disagreement flags risk</td></tr>
+    <tr><td><span class="pill a">Ground truth / calibration</span></td><td>On-site met station, nearby operating plants (Our View), NIWE SRRA</td><td>Used to detect and correct bias of the satellite model at that location (site adaptation)</td></tr>
+    <tr><td><span class="pill r">Screening only</span></td><td>NASA POWER, ERA5 irradiance, Solargis Prospect maps</td><td>Too coarse or too averaged for bankable yield; fine for site screening and sanity checks</td></tr>
+  </table>
+  </div>
+</section>
+
+<!-- 05 ACCURACY -->
+<section id="accuracy">
+  <div class="sec-num">05</div>
+  <h2>What paid data buys you <span class="level">The databases</span></h2>
+  <p>Free and paid datasets both start from satellites or stations. The accuracy difference comes from <b>what goes into the model and how hard the provider works to validate it</b>. These are the levers:</p>
+  <div class="grid2">
+    <div class="card"><h3>1. Better aerosol inputs</h3><p class="small">Using daily, near-real aerosol data (e.g. CAMS) rather than a monthly climatology. In India, where dust and haze swing day to day, this is the largest accuracy lever.</p></div>
+    <div class="card"><h3>2. Higher time &amp; space resolution</h3><p class="small">15-minute (or finer) values and fine spatial grids downscaled with terrain. Sub-hourly data matters for inverter clipping at high DC/AC ratios and for BESS sizing — hourly data hides short peaks.</p></div>
+    <div class="card"><h3>3. Long, recent, continuous record</h3><p class="small">A real time series from the late 1990s or 2000s to last month captures true year-to-year variability and recent climate (aerosol trends). Free products often stop years ago.</p></div>
+    <div class="card"><h3>4. Validation against ground stations</h3><p class="small">Providers that compare against hundreds of quality-controlled stations know their bias by region and climate, and can publish a site-specific uncertainty instead of a generic one.</p></div>
+    <div class="card"><h3>5. Cloud, snow &amp; terrain handling</h3><p class="small">Distinguishing bright desert or salt-pan surfaces from cloud (relevant for Rann of Kutch-type sites), horizon shading, elevation correction.</p></div>
+    <div class="card"><h3>6. Bankability &amp; licence</h3><p class="small">A recognised name, documented method and a licence that allows sharing with lenders. Part of what you pay for is that the lender's engineer will not re-open the question.</p></div>
+  </div>
+  <div class="callout"><b>What paid data does NOT fix:</b> it is still a model. In regions with high and changing aerosols — India is explicitly cited by providers as one — even the best commercial model can carry a systematic bias of several percent at a given site. That is exactly why ground measurements and our nearby-plant benchmark remain valuable.</div>
+  <h3>Why some datasets are deliberately not used</h3>
+  <div class="scroll"><table>
+    <tr><th>Reason for exclusion</th><th>What it means</th><th>Typical example</th></tr>
+    <tr><td>Too coarse</td><td>One grid cell covers 25–50 km; local haze, coast or hills averaged away</td><td>NASA POWER, ERA5 irradiance</td></tr>
+    <tr><td>Synthetic hourly</td><td>Hourly values generated statistically from monthly means — no real weather sequence, no real inter-annual variability</td><td>Meteonorm hourly files used for P90 or clipping</td></tr>
+    <tr><td>Old or short period</td><td>Doesn't reflect the last decade's aerosol and climate conditions, or too few years to estimate variability</td><td>NSRDB India 2017–2019; older station climatologies</td></tr>
+    <tr><td>Not validated for the region</td><td>Validation done mainly in Europe/Africa; unknown bias in South Asia</td><td>Some free products outside their core region</td></tr>
+    <tr><td>Hourly only</td><td>Underestimates clipping losses for high DC/AC designs and short ramps for BESS</td><td>Hourly-only free sources</td></tr>
+    <tr><td>Not accepted by lender</td><td>Lender's engineer will reject or haircut the result</td><td>Any single free source used alone</td></tr>
+  </table></div>
+</section>
+
+<!-- 06 TMY -->
+<section id="tmy">
+  <div class="sec-num">06</div>
+  <h2>TMY vs time series <span class="level">The databases</span></h2>
+  <div class="grid2">
+    <div class="card"><h3>Time series</h3><p class="small">The actual recorded (modelled) weather, year by year: e.g. 2005, 2006 … 2024, at 15-min or hourly steps. You can simulate every year separately and see how energy really varies.</p></div>
+    <div class="card"><h3>TMY — Typical Meteorological Year</h3><p class="small">One synthetic 8,760-hour year built by stitching together the most "typical" months from the time series (Jan from 2011, Feb from 2017, …). Statistically close to the long-term average. Fast and convenient for PVsyst — but by design it removes extremes.</p></div>
+  </div>
+  <div class="grid3" style="margin-top:14px">
+    <div class="card soft"><b>P50 TMY</b><p class="small">Represents the long-term median year. Used for the P50 energy simulation.</p></div>
+    <div class="card soft"><b>P90 TMY</b><p class="small">A year constructed to sit at the 90% exceedance level of irradiance. Convenient, but it only reflects <i>resource</i> uncertainty, not losses or modelling.</p></div>
+    <div class="card soft"><b>Synthetic TMY (Meteonorm)</b><p class="small">Generated from monthly averages using a stochastic model, not picked from real months. Useful, but it carries no real year-to-year information.</p></div>
+  </div>
+  <div class="callout red"><b>Known pitfall in South Asia:</b> NREL's study of South Asia found that the energy from a TMY was frequently biased high relative to the true median year, and that no single calendar year represents P50 or P90 across the region. A TMY result should be cross-checked against simulating each year of the time series.</div>
+
+  <div class="tool" id="tool-tmy">
+    <div class="tool-h"><span class="tag">Tool 3</span><span class="t">Year-to-year variability simulator</span></div>
+    <div class="tool-b">
+      <div class="controls">
+        <label class="ctl">Long-term mean GHI <span class="v" id="yMeanV"></span><input type="range" id="yMean" min="1700" max="2200" step="5" value="2000"></label>
+        <label class="ctl">Inter-annual variability σ (%) <span class="v" id="ySigV"></span><input type="range" id="ySig" min="1" max="6" step="0.1" value="2.5"></label>
+        <label class="ctl">Long-term trend (%/yr) <span class="v" id="yTrV"></span><input type="range" id="yTr" min="-0.5" max="0.3" step="0.05" value="0"></label>
+        <label class="ctl">&nbsp;<button class="ghost" id="yRoll" style="width:100%">↻ New weather draw</button></label>
+      </div>
+      <div class="svgwrap" id="yChart"></div>
+      <div class="out">
+        <div class="o"><div class="l">Mean of 20 years</div><div class="v" id="yOMean">–</div></div>
+        <div class="o"><div class="l">Mean of last 10 years</div><div class="v" id="yORecent">–</div></div>
+        <div class="o"><div class="l">Measured σ</div><div class="v" id="yOSig">–</div></div>
+        <div class="o hl"><div class="l">1-year P90 GHI</div><div class="v" id="yOP90">–</div></div>
+        <div class="o"><div class="l">Years below P90</div><div class="v" id="yOBelow">–</div></div>
+      </div>
+      <p class="note">Each bar is one simulated weather year. The dashed line is what a TMY would represent; the red line is the one-year P90. Add a negative trend (aerosol dimming) and see why the last 10 years can differ from the 20-year mean — the reason reviewers ask which period a dataset covers.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 07 UNCERTAINTY -->
+<section id="uncertainty">
+  <div class="sec-num">07</div>
+  <h2>Uncertainty, P50 &amp; P90 <span class="level">Advanced</span></h2>
+  <p>P50 is the energy you expect to exceed half the time. P90 is the energy you expect to exceed in 9 years out of 10. The gap between them is set entirely by the <b>combined uncertainty</b>, which is built from independent components added in quadrature (root-sum-square).</p>
+  <div class="grid2">
+    <div class="card">
+      <h4>Resource-side components</h4>
+      <ul class="tight small">
+        <li><b>Long-term resource (model) uncertainty</b> — how wrong the dataset's long-term average could be at this site. Largest term; reduced by site adaptation.</li>
+        <li><b>Inter-annual variability (IAV)</b> — how much one year differs from another. For N years, it shrinks by √N.</li>
+        <li><b>Transposition / POA</b> — GHI → GTI conversion, diffuse split, albedo.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Plant-side components</h4>
+      <ul class="tight small">
+        <li><b>PV simulation model</b> — module, temperature, mismatch, IAM modelling.</li>
+        <li><b>Soiling &amp; losses</b> — especially material in dusty Indian sites.</li>
+        <li><b>Degradation &amp; availability</b> — long-term assumptions.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout teal"><b>Reading provider uncertainty.</b> Providers often quote uncertainty at a confidence level (e.g. "±5% at 80%" or "P90 uncertainty ±6%"). The tool below needs the standard deviation (1σ). For a two-sided 80% interval, σ ≈ value ÷ 1.28; for 90%, σ ≈ value ÷ 1.645; for 95%, σ ≈ value ÷ 1.96.</div>
+
+  <div class="tool" id="tool-unc">
+    <div class="tool-h"><span class="tag">Tool 4</span><span class="t">P-value calculator</span></div>
+    <div class="tool-b">
+      <div class="controls">
+        <label class="ctl">P50 annual energy (MWh)<input type="number" id="uP50" value="500000" step="1000"></label>
+        <label class="ctl">Long-term resource σ (%) <span class="v" id="uResV"></span><input type="range" id="uRes" min="1" max="8" step="0.1" value="4.0"></label>
+        <label class="ctl">Inter-annual variability σ, 1-yr (%) <span class="v" id="uIavV"></span><input type="range" id="uIav" min="0.5" max="6" step="0.1" value="2.5"></label>
+        <label class="ctl">Transposition / POA σ (%) <span class="v" id="uTrV"></span><input type="range" id="uTr" min="0" max="4" step="0.1" value="1.5"></label>
+        <label class="ctl">PV simulation model σ (%) <span class="v" id="uSimV"></span><input type="range" id="uSim" min="0" max="5" step="0.1" value="2.0"></label>
+        <label class="ctl">Soiling &amp; other losses σ (%) <span class="v" id="uLossV"></span><input type="range" id="uLoss" min="0" max="5" step="0.1" value="1.5"></label>
+        <label class="ctl">Degradation &amp; availability σ (%) <span class="v" id="uDegV"></span><input type="range" id="uDeg" min="0" max="4" step="0.1" value="1.0"></label>
+        <label class="ctl">Period for P-values<select id="uYears"><option value="1">1 year</option><option value="10" selected>10 years</option><option value="25">25 years</option></select></label>
+      </div>
+      <div class="out">
+        <div class="o"><div class="l">Combined σ (1-yr)</div><div class="v" id="uO1">–</div></div>
+        <div class="o"><div class="l">Combined σ (selected)</div><div class="v" id="uON">–</div></div>
+        <div class="o"><div class="l">P75</div><div class="v" id="uP75">–</div></div>
+        <div class="o hl"><div class="l">P90</div><div class="v" id="uP90">–</div></div>
+        <div class="o"><div class="l">P99</div><div class="v" id="uP99">–</div></div>
+        <div class="o"><div class="l">P90 / P50</div><div class="v" id="uRatio">–</div></div>
+      </div>
+      <div class="svgwrap" id="uChart"></div>
+      <div class="formula">σ_total(N yrs) = √( σ_res² + (σ_IAV/√N)² + σ_transp² + σ_sim² + σ_loss² + σ_deg² )
+P_x = P50 × (1 − z_x · σ_total)      z: P75 = 0.674 · P90 = 1.282 · P95 = 1.645 · P99 = 2.326</div>
+      <p class="note">Notice: going from 1-year to 10-year P90 shrinks only the IAV term. The long-term resource uncertainty does not average out over time — if the dataset is biased, it is biased every year. That is why reducing σ_res (better data, site adaptation, nearby-plant benchmark) moves P90 the most.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 08 COMPARE -->
+<section id="compare">
+  <div class="sec-num">08</div>
+  <h2>Multi-source comparison <span class="level">Advanced</span></h2>
+  <p>The core analytical step in a TDD SRA: pull the site's long-term GHI from several independent sources and see where the developer's chosen source sits. If it is the highest of the pack, the burden of proof is on the developer.</p>
+  <div class="tool" id="tool-cmp">
+    <div class="tool-h"><span class="tag">Tool 5</span><span class="t">Source deviation comparator</span></div>
+    <div class="tool-b">
+      <div class="controls">
+        <label class="ctl">Parameter<select id="cPar"><option>GHI</option><option>GTI</option></select></label>
+        <label class="ctl">Reference source<select id="cRef"></select></label>
+        <label class="ctl">Green band (±%) <span class="v" id="cGV"></span><input type="range" id="cG" min="1" max="5" step="0.5" value="3"></label>
+        <label class="ctl">Amber band (±%) <span class="v" id="cAV"></span><input type="range" id="cA" min="3" max="10" step="0.5" value="5"></label>
+      </div>
+      <div class="scroll"><table id="cTable"></table></div>
+      <div style="margin-top:8px"><button class="ghost" id="cAdd">+ Add source</button></div>
+      <div class="svgwrap" id="cChart" style="margin-top:12px"></div>
+      <div class="out">
+        <div class="o"><div class="l">Median of sources</div><div class="v" id="cMed">–</div></div>
+        <div class="o"><div class="l">Spread (max − min)</div><div class="v" id="cSpread">–</div></div>
+        <div class="o"><div class="l">Coefficient of variation</div><div class="v" id="cCov">–</div></div>
+        <div class="o hl"><div class="l">Developer source vs median</div><div class="v" id="cDev">–</div></div>
+      </div>
+      <div class="callout teal" id="cMsg"></div>
+      <p class="note">Values pre-filled are illustrative placeholders, not data for any real site. Replace them with the figures your resource team pulls. Tick "Developer" on the source used in the developer's PVsyst report.</p>
+    </div>
+  </div>
+  <h3>What else to compare beyond the annual number</h3>
+  <ul class="tight">
+    <li><b>Monthly profile</b> — a source can match annually but be wrong in monsoon months; this matters for seasonal PPA and BESS cases.</li>
+    <li><b>Diffuse fraction</b> — differences of a few points change tracker and bifacial gains.</li>
+    <li><b>Data period</b> — 1996–2015 vs 2005–2024 is not a like-for-like comparison.</li>
+    <li><b>Temperature</b> — drives thermal losses; a 1–2 °C bias moves energy by roughly 0.4–0.8%.</li>
+    <li><b>Time step</b> — hourly vs 15-min affects clipping estimates at DC/AC above ~1.3.</li>
+  </ul>
+</section>
+
+<!-- 09 OUR VIEW -->
+<section id="ourview">
+  <div class="sec-num">09</div>
+  <h2>Our View: the nearby-plant benchmark <span class="level">Advanced</span></h2>
+  <p>This is the additional, independent opinion we add on top of the database comparison. If we operate or monitor a plant within about 50–100 km of the target site, that plant's quality-controlled pyranometer data is <b>real measured sunlight in the same climate</b>. Comparing it against what the databases predicted <i>for that operating plant's location</i> tells us how biased the databases are in this region — and we can carry that correction to the target site.</p>
+  <div class="callout"><b>Why this is a differentiator.</b> A satellite provider validates against a few public stations. A large O&amp;M portfolio spread across 150+ Indian sites is, in effect, a proprietary ground-truth network covering exactly the regions where projects are being bought and sold. Few TDD consultants can bring that.</div>
+
+  <h3>Method, step by step</h3>
+  <div class="flow">
+    <div class="st"><b>1 · Select</b>Operating plant(s) within ~50–100 km, same climate zone (coastal vs inland, similar elevation, similar aerosol regime)</div>
+    <div class="st"><b>2 · QC the sensor</b>Sensor class, calibration certificate, cleaning log, tilt/orientation, data gaps, night offsets, comparison between redundant sensors</div>
+    <div class="st"><b>3 · Pull the database</b>Same database, same period, at the <i>reference plant's</i> coordinates (and same plane if comparing GTI)</div>
+    <div class="st"><b>4 · Ratio</b>Measured ÷ database, monthly and annual. Check consistency across months and years</div>
+    <div class="st"><b>5 · Transfer</b>Apply the bias to the target site's database value, weighted by confidence</div>
+    <div class="st"><b>6 · Opine</b>State "Our View" GHI/GTI and how it compares with the developer's assumption</div>
+  </div>
+
+  <div class="tool" id="tool-ov">
+    <div class="tool-h"><span class="tag">Tool 6</span><span class="t">Nearby-plant bias transfer</span></div>
+    <div class="tool-b">
+      <div class="controls">
+        <label class="ctl">Distance reference → target (km)<input type="number" id="oDist" value="60" min="0" step="1"></label>
+        <label class="ctl">Elevation difference (m)<input type="number" id="oElev" value="80" min="0" step="10"></label>
+        <label class="ctl">Same climate zone?<select id="oZone"><option value="1">Yes</option><option value="0.6">No / uncertain</option></select></label>
+        <label class="ctl">Years of measured data<select id="oYrs"><option value="0.6">1 year</option><option value="0.8" selected>2 years</option><option value="1">3+ years</option></select></label>
+        <label class="ctl">Sensor type<select id="oSens"><option value="1">Thermopile pyranometer, Class A</option><option value="0.85" selected>Thermopile pyranometer, Class B</option><option value="0.7">Silicon reference cell</option></select></label>
+        <label class="ctl">Data availability after QC<select id="oQc"><option value="1">≥ 95%</option><option value="0.85" selected>85–95%</option><option value="0.6">&lt; 85%</option></select></label>
+        <label class="ctl">Measured plane<select id="oPlane"><option value="1">Horizontal (GHI)</option><option value="0.85">Plane-of-array (GTI)</option></select></label>
+      </div>
+      <div class="scroll"><table id="oTable"></table></div>
+      <div class="svgwrap" id="oChart" style="margin-top:12px"></div>
+      <div class="out">
+        <div class="o"><div class="l">Database bias at reference plant</div><div class="v" id="oBias">–</div></div>
+        <div class="o"><div class="l">Month-to-month consistency (σ of ratio)</div><div class="v" id="oCons">–</div></div>
+        <div class="o"><div class="l">Confidence score</div><div class="v" id="oScore">–</div></div>
+        <div class="o"><div class="l">Target: database value</div><div class="v" id="oTdb">–</div></div>
+        <div class="o hl"><div class="l">Target: Our View</div><div class="v" id="oTov">–</div></div>
+        <div class="o"><div class="l">Our View vs database</div><div class="v" id="oDelta">–</div></div>
+      </div>
+      <div class="formula" id="oFormula"></div>
+      <div class="callout teal" id="oMsg"></div>
+      <p class="note">The confidence factors are a starting heuristic, written so the team can audit and calibrate them: score = distance factor × years × sensor × QC × climate zone × elevation × plane. Monthly values are illustrative placeholders; paste in the real database and SCADA values.</p>
+    </div>
+  </div>
+
+  <h3>Pitfalls that ruin a nearby-plant comparison</h3>
+  <div class="grid2">
+    <div class="card"><b>Dirty or drifting sensors</b><p class="small">An uncleaned pyranometer reads low and makes the database look optimistic. Check cleaning logs, compare morning-after-cleaning values, check redundant sensors and year-on-year drift.</p></div>
+    <div class="card"><b>Reference cells vs pyranometers</b><p class="small">Silicon reference cells respond differently to spectrum and angle than thermopile pyranometers; raw values can differ by a few percent. Convert or treat with lower confidence.</p></div>
+    <div class="card"><b>Plane mismatch</b><p class="small">POA sensors on a tracker or a 20° tilt can't be compared with a database's GHI. Transpose the database to the exact same geometry, or prefer a horizontal sensor.</p></div>
+    <div class="card"><b>Period mismatch</b><p class="small">Compare measured 2023–2024 with database 2023–2024, never with the database's long-term average. Weather years differ by several percent.</p></div>
+    <div class="card"><b>Different climate pocket</b><p class="small">50 km in India can cross from coastal to inland, or into a hill or industrial haze zone. Distance alone is not similarity.</p></div>
+    <div class="card"><b>Time stamps &amp; gaps</b><p class="small">IST vs UTC, interval-start vs interval-end labelling and filled gaps can create apparent biases. Align time stamps and compare only on common valid intervals.</p></div>
+  </div>
+</section>
+
+<!-- 10 WORKFLOW -->
+<section id="workflow">
+  <div class="sec-num">10</div>
+  <h2>SRA workflow in a TDD <span class="level">Advanced</span></h2>
+  <div class="scroll"><table>
+    <tr><th>#</th><th>Activity</th><th>Output in the TDD report</th></tr>
+    <tr><td>1</td><td>Collect developer's energy yield report, PVsyst files, weather file, any site measurement data</td><td>Document register</td></tr>
+    <tr><td>2</td><td>Identify the dataset used: provider, version, period, time step, TMY type (P50/P90/synthetic)</td><td>Statement of the developer's basis</td></tr>
+    <tr><td>3</td><td>Pull independent sources at site coordinates (Solargis, Meteonorm, PVGIS, NSRDB …)</td><td>Multi-source comparison table and chart</td></tr>
+    <tr><td>4</td><td>Review site measurements if any: sensor class, QC, length, site adaptation done or not</td><td>Measurement adequacy opinion</td></tr>
+    <tr><td>5</td><td>Our View: nearby operating plant benchmark</td><td>Regional bias and independent GHI/GTI estimate</td></tr>
+    <tr><td>6</td><td>Check monthly profile, diffuse fraction, temperature, albedo, transposition model</td><td>Comments on secondary inputs</td></tr>
+    <tr><td>7</td><td>Review uncertainty build-up and P-values</td><td>Opinion on P50, P90 (1-yr / 10-yr)</td></tr>
+    <tr><td>8</td><td>Conclude: accept, accept with comments, or recommend a haircut</td><td>Resource conclusion and recommended GHI/GTI</td></tr>
+  </table></div>
+
+  <h3>Red flags</h3>
+  <div class="grid2">
+    <div class="card"><ul class="tight small">
+      <li>Developer's source is the highest of all sources by more than ~3%</li>
+      <li>Free or screening-grade dataset used as the sole basis</li>
+      <li>Synthetic hourly data used for P90 or clipping</li>
+      <li>Data period ending many years ago</li>
+    </ul></div>
+    <div class="card"><ul class="tight small">
+      <li>Resource uncertainty below ~3% without site adaptation evidence</li>
+      <li>P90 computed from a P90 TMY alone, ignoring plant-side uncertainty</li>
+      <li>"Site measurement" shorter than a year, or with no QC or cleaning record</li>
+      <li>GTI gain inconsistent with diffuse fraction and mounting</li>
+    </ul></div>
+  </div>
+
+  <h3>Reviewer checklist</h3>
+  <ul class="tight check" id="checklist">
+    <li><label><input type="checkbox">Dataset provider, version and period identified</label></li>
+    <li><label><input type="checkbox">At least three independent sources compared at site coordinates</label></li>
+    <li><label><input type="checkbox">Developer's value positioned against the median of sources</label></li>
+    <li><label><input type="checkbox">Monthly profile and diffuse fraction checked</label></li>
+    <li><label><input type="checkbox">Time step adequate for DC/AC ratio and any BESS</label></li>
+    <li><label><input type="checkbox">Site / nearby measurements quality-controlled</label></li>
+    <li><label><input type="checkbox">Our View benchmark performed or reason recorded</label></li>
+    <li><label><input type="checkbox">Uncertainty components listed and combined correctly</label></li>
+    <li><label><input type="checkbox">1-yr and 10-yr P90 reported</label></li>
+    <li><label><input type="checkbox">Clear conclusion and any recommended adjustment</label></li>
+  </ul>
+  <p class="small muted" id="chkCount"></p>
+  <div class="callout teal"><b>Reference standard:</b> the IEA PVPS Task 16 best-practices handbook on solar resource data is the industry's main reference for measurement, satellite data, uncertainty and site adaptation. Citing it in the TDD methodology section strengthens the opinion.</div>
+</section>
+
+<!-- 11 GLOSSARY -->
+<section id="glossary">
+  <div class="sec-num">11</div>
+  <h2>Glossary</h2>
+  <input type="text" id="glSearch" placeholder="Search a term… (e.g. AOD, site adaptation, Perez)" style="max-width:420px;margin:8px 0 6px">
+  <div id="glList"></div>
+</section>
+
+<p class="note" style="margin-top:30px">Dataset descriptions reflect public provider information as of late 2026; versions, periods and coverage change — confirm at the time of each engagement. Figures inside tools are illustrative unless replaced with project data.</p>
+</main>
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+const $ = id => document.getElementById(id);
+const fmt = (x,d=0) => isFinite(x) ? x.toLocaleString('en-IN',{minimumFractionDigits:d,maximumFractionDigits:d}) : '–';
+const pct = (x,d=1) => isFinite(x) ? (x>=0?'+':'')+(x*100).toFixed(d)+'%' : '–';
+const rad = d => d*Math.PI/180;
+const C = {accent:'#0f5c57',accent2:'#13807a',sun:'#c98102',red:'#b0412b',green:'#2b7a4b',muted:'#5a6470',line:'#e5e7ea',faint:'#8a929c',blue:'#2a5a9e',soft:'#eef3f2'};
+function svgEl(w,h,inner){return `<svg viewBox="0 0 ${w} ${h}" width="100%" preserveAspectRatio="xMidYMid meet" role="img">${inner}</svg>`;}
+function niceRange(min,max){const pad=(max-min)*0.08||1;return [min-pad,max+pad];}
+
+/* ---------- nav highlight ---------- */
+const navLinks=[...document.querySelectorAll('nav.side a')];
+const secs=navLinks.map(a=>document.querySelector(a.getAttribute('href')));
+function onScroll(){let cur=0;secs.forEach((s,i)=>{if(s&&s.getBoundingClientRect().top<140)cur=i;});navLinks.forEach((a,i)=>a.classList.toggle('active',i===cur));}
+document.addEventListener('scroll',onScroll,{passive:true});onScroll();
+navLinks.forEach(a=>a.addEventListener('click',()=>document.querySelector('nav.side').classList.remove('open')));
+
+/* ---------- TOOL 1: transposition ---------- */
+function transpose(latDeg,ghiAnn,kd,alb,mode,tiltDeg){
+  const phi=rad(latDeg); let W=0; const pts=[];
+  for(let d=1;d<=365;d+=2){
+    const dec=rad(23.45*Math.sin(2*Math.PI*(284+d)/365));
+    for(let wDeg=-97.5;wDeg<=97.5;wDeg+=7.5){
+      const w=rad(wDeg);
+      const cz=Math.sin(phi)*Math.sin(dec)+Math.cos(phi)*Math.cos(dec)*Math.cos(w);
+      if(cz<=0.03) continue;
+      const mons=(d>=152&&d<=273)?0.78:1; // monsoon months: less sunlight
+      const wt=Math.pow(cz,1.15)*mons;
+      pts.push([dec,w,cz,wt]); W+=wt;
+    }
+  }
+  let B=0,D=0,R=0;
+  const beta=rad(tiltDeg);
+  for(const [dec,w,cz,wt] of pts){
+    const g=ghiAnn*wt/W, bh=g*(1-kd), dh=g*kd;
+    let cth,tilt;
+    if(mode==='fixed'){
+      cth=Math.sin(phi-beta)*Math.sin(dec)+Math.cos(phi-beta)*Math.cos(dec)*Math.cos(w);
+      tilt=beta;
+    } else {
+      const se=Math.abs(Math.cos(dec)*Math.sin(w)); // east-west component of sun vector
+      let r=Math.atan2(se,cz); const lim=rad(60); if(r>lim) r=lim;
+      cth=Math.cos(r)*cz+Math.sin(r)*se; tilt=r;
+    }
+    cth=Math.max(0,cth);
+    const rb=Math.min(cth/cz,6);
+    B+=bh*rb; D+=dh*(1+Math.cos(tilt))/2; R+=g*alb*(1-Math.cos(tilt))/2;
+  }
+  return {B,D,R,G:B+D+R};
+}
+function drawTransp(){
+  const lat=+$('tLat').value, ghi=+$('tGhi').value, kd=+$('tKd').value, alb=+$('tAlb').value, mode=$('tMode').value, tilt=+$('tTilt').value;
+  $('tLatV').textContent=lat+'°'; $('tGhiV').textContent=fmt(ghi); $('tKdV').textContent=kd.toFixed(2); $('tAlbV').textContent=alb.toFixed(2); $('tTiltV').textContent=tilt+'°';
+  $('tTiltWrap').style.opacity = mode==='fixed'?1:.35; $('tTilt').disabled = mode!=='fixed';
+  const r=transpose(lat,ghi,kd,alb,mode,tilt);
+  $('tOutGti').textContent=fmt(r.G); $('tOutGain').textContent=pct(r.G/ghi-1);
+  $('tOutB').textContent=fmt(r.B); $('tOutD').textContent=fmt(r.D); $('tOutR').textContent=fmt(r.R);
+  // chart: gain vs tilt (fixed) for 3 diffuse fractions + tracker markers
+  const w=760,h=250,ml=50,mr=150,mt=18,mb=36; const pw=w-ml-mr, ph=h-mt-mb;
+  const tilts=[];for(let t=0;t<=40;t+=4)tilts.push(t);
+  const kds=[Math.max(0.2,kd-0.12),kd,Math.min(0.6,kd+0.12)];
+  const series=kds.map(k=>tilts.map(t=>transpose(lat,ghi,k,alb,'fixed',t).G/ghi-1));
+  const trk=kds.map(k=>transpose(lat,ghi,k,alb,'sat',0).G/ghi-1);
+  const all=series.flat().concat(trk); let [y0,y1]=niceRange(Math.min(0,...all),Math.max(...all));
+  const X=t=>ml+t/40*pw, Y=v=>mt+ph-(v-y0)/(y1-y0)*ph;
+  let s='';
+  for(let i=0;i<=4;i++){const v=y0+(y1-y0)*i/4;s+=`<line x1="${ml}" x2="${ml+pw}" y1="${Y(v)}" y2="${Y(v)}" stroke="${C.line}"/><text x="${ml-6}" y="${Y(v)+4}" font-size="11" text-anchor="end" fill="${C.faint}">${(v*100).toFixed(0)}%</text>`;}
+  tilts.forEach(t=>{if(t%8===0)s+=`<text x="${X(t)}" y="${h-14}" font-size="11" text-anchor="middle" fill="${C.faint}">${t}°</text>`;});
+  s+=`<text x="${ml+pw/2}" y="${h-1}" font-size="11" text-anchor="middle" fill="${C.muted}">Fixed tilt angle</text>`;
+  const cols=[C.accent2,C.accent,C.sun];
+  series.forEach((sr,i)=>{const d=sr.map((v,j)=>(j?'L':'M')+X(tilts[j])+','+Y(v)).join(' ');s+=`<path d="${d}" fill="none" stroke="${cols[i]}" stroke-width="${i===1?2.6:1.5}" ${i!==1?'stroke-dasharray="4 3"':''}/>`;
+    s+=`<text x="${ml+pw+10}" y="${Y(sr[sr.length-1])+4}" font-size="11" fill="${cols[i]}">Fixed, DHI/GHI ${kds[i].toFixed(2)}</text>`;});
+  trk.forEach((v,i)=>{s+=`<line x1="${ml}" x2="${ml+pw}" y1="${Y(v)}" y2="${Y(v)}" stroke="${cols[i]}" stroke-width="1" stroke-dasharray="1 4"/><text x="${ml+pw+10}" y="${Y(v)+4}" font-size="11" fill="${cols[i]}">Tracker, ${kds[i].toFixed(2)}</text>`;});
+  if(mode==='fixed'){s+=`<circle cx="${X(tilt)}" cy="${Y(r.G/ghi-1)}" r="5" fill="${C.accent}"/>`;}
+  s+=`<text x="${ml}" y="11" font-size="11.5" fill="${C.muted}">GTI gain over GHI vs tilt, for three diffuse fractions</text>`;
+  $('tChart').innerHTML=svgEl(w,h,s);
+}
+['tLat','tGhi','tKd','tAlb','tMode','tTilt'].forEach(id=>$(id).addEventListener('input',drawTransp));
+drawTransp();
+
+/* ---------- TOOL 2: dataset explorer ---------- */
+const DS=[
+ {id:'sg',name:'Solargis Evaluate',prov:'Solargis (Slovakia)',type:'Satellite',cost:'paid',role:['g','Primary / bankable'],
+  method:'Satellite cloud imagery (Meteosat Indian Ocean coverage for India) run through a clear-sky + cloud model, with daily aerosol and water-vapour inputs; terrain downscaling.',
+  out:'15-min / hourly time series, P50 and P90 TMY, long-term monthly statistics, uncertainty statement',
+  res:'Fine grid (provider states ~250 m after downscaling); 15-min or better',
+  period:'Multi-decade time series updated to recent months',
+  india:'Widely used and accepted by Indian lenders. Provider itself lists India among higher-uncertainty regions because of high, variable aerosols — expected bias can be larger and more systematic here.',
+  use:'Default primary dataset for bankable P50/P90 and sub-hourly simulations.',
+  why:'Real continuous time series, recent years, sub-hourly, published validation and site-specific uncertainty, lender acceptance.',
+  limit:'Cost per site; licence terms on sharing; still a model — systematic local bias possible in hazy regions, so cross-check with ground data.'},
+ {id:'sgp',name:'Solargis Prospect',prov:'Solargis',type:'Satellite',cost:'paid',role:['r','Screening / quick check'],
+  method:'Same Solargis model, delivered as long-term averages through a fast web tool.',
+  out:'Long-term monthly and annual averages, quick PV yield estimate, maps',
+  res:'Map-level; monthly averages', period:'Long-term average',
+  india:'Handy for comparing many candidate sites quickly.',
+  use:'Early-stage screening, bid support, quick sanity check of a developer number.',
+  why:'This is the "Prospect" the team mentions — fast and cheap compared with a full Evaluate dataset.',
+  limit:'No full time series, no P90 TMY; not a basis for a bankable yield on its own.'},
+ {id:'mn',name:'Meteonorm',prov:'Meteotest (Switzerland)',type:'Interpolation',cost:'paid',role:['b','Cross-check'],
+  method:'Interpolation of long-term means from 8,000+ ground stations blended with satellite data, then stochastic generation of hourly/minute values from those monthly means.',
+  out:'Synthetic TMY in 30+ formats (PVsyst, EPW, TMY3…), monthly climatology; newer versions add historical observation series',
+  res:'Station/satellite blend; synthetic hourly or minute',
+  period:'Version 8 standard irradiation period 1996–2015; version 9 (web/API, launched 2025) refreshes sources and periods',
+  india:'Indian high-quality ground stations are sparse, so the result leans on satellite inputs. Often the default in developer PVsyst reports because PVsyst ships with Meteonorm monthly data.',
+  use:'Independent second opinion; widely recognised; good for typical-year building/PV studies.',
+  why:'Different method from satellite-only providers — useful as an independent check.',
+  limit:'Hourly data is synthetic, so it cannot represent real inter-annual variability, real sub-hourly peaks or true P90. Older default periods may miss recent aerosol trends.'},
+ {id:'pv',name:'PVGIS 5.3 / 6',prov:'EU Joint Research Centre',type:'Satellite',cost:'free',role:['b','Cross-check'],
+  method:'CM SAF SARAH-3 satellite data (~5 km) where covered, otherwise ECMWF ERA5 reanalysis (~25–28 km).',
+  out:'Hourly time series, TMY, monthly data, simple PV calculation',
+  res:'SARAH-3 ~5 km; ERA5 ~25–28 km; hourly',
+  period:'PVGIS 5.3: 2005–2023. PVGIS 6: 2014–2024',
+  india:'Always check which database PVGIS selected for the site. Validation by JRC is mainly against BSRN stations in Europe/Africa, so South Asia bias is less documented.',
+  use:'Free independent cross-check with real hourly series.',
+  why:'Transparent, free, real time series.',
+  limit:'Hourly only; if ERA5 is used, irradiance is coarse and cloud errors larger. Not lender-grade alone.'},
+ {id:'ns',name:'NREL NSRDB (India)',prov:'US NREL',type:'Satellite',cost:'free',role:['b','Cross-check'],
+  method:'Physical Solar Model (PSM v3) on satellite data; earlier SUNY-model product for South Asia.',
+  out:'Time series and TMY, GHI/DNI/DHI plus meteorology',
+  res:'4 km, 15-min (2017–2019); older 10 km, hourly (2000–2014)',
+  period:'2017–2019 (PSM v3); 2000–2014 (SUNY South Asia)',
+  india:'Built under the US–India partnership; validated against a few MNRE/NISE ground stations.',
+  use:'Free sub-hourly cross-check; variability studies.',
+  why:'Good physics-based independent model.',
+  limit:'Short (3-year) or dated periods; not maintained to present for India; not bankable alone.'},
+ {id:'na',name:'NASA POWER',prov:'NASA',type:'Reanalysis',cost:'free',role:['r','Screening only'],
+  method:'CERES satellite radiation and MERRA-2 reanalysis.',
+  out:'Daily / hourly irradiance and meteorology',
+  res:'~0.5° grid (~50 km)', period:'Several decades to near-real-time',
+  india:'One cell covers a whole district — local haze, coast and terrain averaged out.',
+  use:'First-look screening, long-term temperature context.',
+  why:'Free and global.',
+  limit:'Far too coarse for yield; known biases. Using it as the basis is a red flag.'},
+ {id:'era',name:'ERA5 / MERRA-2',prov:'ECMWF / NASA',type:'Reanalysis',cost:'free',role:['r','Supporting only'],
+  method:'Global weather-model reanalysis assimilating observations.',
+  out:'Hourly irradiance, temperature, wind, humidity',
+  res:'~25–30 km (ERA5), ~50 km (MERRA-2)', period:'Many decades to present',
+  india:'Strong for temperature, wind and long-term trend checks.',
+  use:'Long-term reference for trend and temperature; fills gaps where satellite is missing.',
+  why:'Longest consistent record.',
+  limit:'Cloud and aerosol representation too coarse for bankable irradiance.'},
+ {id:'niwe',name:'NIWE SRRA stations',prov:'NIWE / MNRE (India)',type:'Ground',cost:'paid',role:['a','Ground truth'],
+  method:'National network of solar radiation resource assessment stations measuring GHI, DNI, DHI and meteorology.',
+  out:'Measured minute/hourly data (purchased or on request)',
+  res:'Point measurement', period:'Station-dependent, roughly from the early 2010s',
+  india:'India-specific measured data; quality and continuity vary by station.',
+  use:'Validation and site adaptation of satellite data when a station is close and similar.',
+  why:'Independent measurement, not a model.',
+  limit:'Distance from site, gaps, maintenance quality; must be quality-controlled before use.'},
+ {id:'site',name:'Site / operating-plant sensors',prov:'Developer, O&M operator (incl. our portfolio)',type:'Ground',cost:'free',role:['a','Ground truth · Our View'],
+  method:'Pyranometers or reference cells on site met stations and inside operating plants, logged via SCADA.',
+  out:'1-min to 15-min measured GHI and/or POA',
+  res:'Point measurement', period:'Usually 1–5 years',
+  india:'Our O&M fleet gives measured data across many regions — the basis of the nearby-plant benchmark.',
+  use:'Site adaptation, regional bias detection, Our View.',
+  why:'The only true ground truth; captures local aerosols and haze.',
+  limit:'Sensor class, cleaning, calibration and plane must be verified; too short alone for long-term average.'},
+ {id:'oth',name:'Other commercial providers',prov:'e.g. SolarAnywhere, Vaisala and others',type:'Satellite',cost:'paid',role:['b','Cross-check / client choice'],
+  method:'Proprietary satellite models with their own aerosol and cloud treatments.',
+  out:'Time series and TMY',
+  res:'Provider-specific', period:'Provider-specific',
+  india:'Confirm India coverage and published South Asia validation before relying on them.',
+  use:'When a lender or client specifies a provider, or as an extra independent commercial view.',
+  why:'Independent commercial model.',
+  limit:'Coverage and validation in India vary; cost.'}
+];
+let dsFilter='all', dsSel='sg';
+function costPill(c){return c==='paid'?'<span class="pill a">Paid</span>':'<span class="pill g">Free</span>';}
+function renderDS(){
+  const list=DS.filter(d=>dsFilter==='all'||d.cost===dsFilter||d.type===dsFilter);
+  $('dsGrid').innerHTML=list.map(d=>`<div class="ds ${d.id===dsSel?'sel':''}" data-id="${d.id}"><div class="nm">${d.name}</div><div class="pv">${d.prov}</div><div class="tags">${costPill(d.cost)}<span class="pill n">${d.type}</span><span class="pill ${d.role[0]}">${d.role[1]}</span></div></div>`).join('')||'<p class="muted">No datasets match.</p>';
+  document.querySelectorAll('.ds').forEach(el=>el.addEventListener('click',()=>{dsSel=el.dataset.id;renderDS();}));
+  const d=DS.find(x=>x.id===dsSel)||list[0]; if(!d){$('dsDetail').innerHTML='';return;}
+  $('dsDetail').innerHTML=`<h3>${d.name}</h3><div class="small muted">${d.prov} · ${d.type} · ${d.cost==='paid'?'Paid':'Free'} · <span class="pill ${d.role[0]}">${d.role[1]}</span></div>
+  <div class="kv"><div>How it's built</div><div>${d.method}</div><div>What you get</div><div>${d.out}</div><div>Resolution</div><div>${d.res}</div><div>Period</div><div>${d.period}</div><div>India notes</div><div>${d.india}</div></div>
+  <div class="grid3"><div class="card"><h4>Use it for</h4><p class="small">${d.use}</p></div><div class="card"><h4>Why we use it</h4><p class="small">${d.why}</p></div><div class="card"><h4>Why we hold back</h4><p class="small">${d.limit}</p></div></div>`;
+}
+document.querySelectorAll('#dsFilters .chip').forEach(ch=>ch.addEventListener('click',()=>{document.querySelectorAll('#dsFilters .chip').forEach(c=>c.classList.remove('on'));ch.classList.add('on');dsFilter=ch.dataset.f;renderDS();}));
+renderDS();
+
+/* ---------- TOOL 3: variability ---------- */
+let ySeed=7;
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
+function drawYears(){
+  const m=+$('yMean').value, sg=+$('ySig').value/100, tr=+$('yTr').value/100;
+  $('yMeanV').textContent=fmt(m); $('ySigV').textContent=(sg*100).toFixed(1)+'%'; $('yTrV').textContent=(tr*100>=0?'+':'')+(tr*100).toFixed(2)+'%';
+  const rnd=mulberry32(ySeed); const yrs=[],vals=[];
+  for(let i=0;i<20;i++){const u1=Math.max(rnd(),1e-9),u2=rnd();const z=Math.sqrt(-2*Math.log(u1))*Math.cos(2*Math.PI*u2);yrs.push(2005+i);vals.push(m*(1+tr*(i-9.5))*(1+sg*z));}
+  const mean=vals.reduce((a,b)=>a+b)/vals.length; const recent=vals.slice(10).reduce((a,b)=>a+b)/10;
+  const sd=Math.sqrt(vals.reduce((a,b)=>a+(b-mean)**2,0)/(vals.length-1)); const p90=mean-1.2816*sd;
+  const below=vals.filter(v=>v<p90).length;
+  $('yOMean').textContent=fmt(mean); $('yORecent').textContent=fmt(recent); $('yOSig').textContent=(sd/mean*100).toFixed(1)+'%'; $('yOP90').textContent=fmt(p90); $('yOBelow').textContent=below+' of 20';
+  const w=760,h=250,ml=50,mr=70,mt=16,mb=30,pw=w-ml-mr,ph=h-mt-mb;
+  let [y0,y1]=niceRange(Math.min(...vals,p90),Math.max(...vals)); const bw=pw/20;
+  const Y=v=>mt+ph-(v-y0)/(y1-y0)*ph; let s='';
+  for(let i=0;i<=4;i++){const v=y0+(y1-y0)*i/4;s+=`<line x1="${ml}" x2="${ml+pw}" y1="${Y(v)}" y2="${Y(v)}" stroke="${C.line}"/><text x="${ml-6}" y="${Y(v)+4}" font-size="11" text-anchor="end" fill="${C.faint}">${fmt(v)}</text>`;}
+  vals.forEach((v,i)=>{const x=ml+i*bw+3;s+=`<rect x="${x}" y="${Y(v)}" width="${bw-6}" height="${mt+ph-Y(v)}" fill="${v<p90?C.red:(i>=10?C.accent:C.accent2)}" opacity="${v<p90?0.85:0.75}" rx="2"><title>${yrs[i]}: ${fmt(v)} kWh/m²</title></rect>`;if(i%2===0)s+=`<text x="${x+(bw-6)/2}" y="${h-12}" font-size="10.5" text-anchor="middle" fill="${C.faint}">${yrs[i]}</text>`;});
+  s+=`<line x1="${ml}" x2="${ml+pw}" y1="${Y(mean)}" y2="${Y(mean)}" stroke="${C.ink||'#16191d'}" stroke-dasharray="6 4"/><text x="${ml+pw+6}" y="${Y(mean)+4}" font-size="11" fill="#16191d">TMY ≈ P50</text>`;
+  s+=`<line x1="${ml}" x2="${ml+pw}" y1="${Y(p90)}" y2="${Y(p90)}" stroke="${C.red}" stroke-width="1.6"/><text x="${ml+pw+6}" y="${Y(p90)+4}" font-size="11" fill="${C.red}">1-yr P90</text>`;
+  s+=`<text x="${ml}" y="11" font-size="11.5" fill="${C.muted}">Annual GHI by year (kWh/m²) · darker bars = last 10 years</text>`;
+  $('yChart').innerHTML=svgEl(w,h,s);
+}
+['yMean','ySig','yTr'].forEach(id=>$(id).addEventListener('input',drawYears));
+$('yRoll').addEventListener('click',()=>{ySeed=Math.floor(Math.random()*1e6);drawYears();});
+drawYears();
+
+/* ---------- TOOL 4: uncertainty ---------- */
+const Z={p75:0.6745,p90:1.2816,p99:2.3263};
+function drawUnc(){
+  const ids=['uRes','uIav','uTr','uSim','uLoss','uDeg']; const v={};
+  ids.forEach(id=>{v[id]=+$(id).value/100;$(id+'V').textContent=(v[id]*100).toFixed(1)+'%';});
+  const N=+$('uYears').value, P50=+$('uP50').value||0;
+  const base=v.uRes**2+v.uTr**2+v.uSim**2+v.uLoss**2+v.uDeg**2;
+  const s1=Math.sqrt(base+v.uIav**2), sN=Math.sqrt(base+(v.uIav/Math.sqrt(N))**2);
+  $('uO1').textContent=(s1*100).toFixed(2)+'%'; $('uON').textContent=(sN*100).toFixed(2)+'%';
+  const p=k=>P50*(1-Z[k]*sN);
+  $('uP75').textContent=fmt(p('p75')); $('uP90').textContent=fmt(p('p90')); $('uP99').textContent=fmt(p('p99'));
+  $('uRatio').textContent=(p('p90')/P50*100).toFixed(1)+'%';
+  // bell curve with 1-yr & N-yr
+  const w=760,h=230,ml=20,mr=20,mt=16,mb=34,pw=w-ml-mr,ph=h-mt-mb;
+  const lo=P50*(1-3.2*s1), hi=P50*(1+3.2*s1); const X=x=>ml+(x-lo)/(hi-lo)*pw;
+  const pdf=(x,s)=>Math.exp(-0.5*((x-P50)/(P50*s))**2)/(P50*s);
+  const maxp=pdf(P50,sN); const Y=y=>mt+ph-y/maxp*ph*0.95; let s='';
+  const pathFor=(sg)=>{let d='';for(let i=0;i<=120;i++){const x=lo+(hi-lo)*i/120;d+=(i?'L':'M')+X(x).toFixed(1)+','+Y(pdf(x,sg)).toFixed(1);}return d;};
+  // shade below P90 for N
+  let sh='M'+X(lo)+','+Y(0);for(let i=0;i<=120;i++){const x=lo+(p('p90')-lo)*i/120;sh+='L'+X(x).toFixed(1)+','+Y(pdf(x,sN)).toFixed(1);}sh+='L'+X(p('p90'))+','+Y(0)+'Z';
+  s+=`<path d="${sh}" fill="${C.red}" opacity="0.12"/>`;
+  s+=`<path d="${pathFor(s1)}" fill="none" stroke="${C.faint}" stroke-width="1.4" stroke-dasharray="4 3"/>`;
+  s+=`<path d="${pathFor(sN)}" fill="none" stroke="${C.accent}" stroke-width="2.4"/>`;
+  s+=`<line x1="${ml}" x2="${ml+pw}" y1="${Y(0)}" y2="${Y(0)}" stroke="${C.line}"/>`;
+  [['P50',P50,'#16191d'],['P75',p('p75'),C.sun],['P90',p('p90'),C.red],['P99',p('p99'),C.red]].forEach(([l,x,c])=>{if(x<lo)return;s+=`<line x1="${X(x)}" x2="${X(x)}" y1="${mt+10}" y2="${Y(0)}" stroke="${c}" stroke-width="1.2"/><text x="${X(x)}" y="${mt+6}" font-size="11" text-anchor="middle" fill="${c}">${l}</text><text x="${X(x)}" y="${h-16}" font-size="10.5" text-anchor="middle" fill="${C.faint}">${fmt(x/1000,0)}k</text>`;});
+  s+=`<text x="${ml}" y="${h-2}" font-size="11" fill="${C.muted}">Annual energy (MWh) · solid = ${N}-year average, dashed = single year · shaded = 10% probability below P90</text>`;
+  $('uChart').innerHTML=svgEl(w,h,s);
+}
+['uRes','uIav','uTr','uSim','uLoss','uDeg','uYears','uP50'].forEach(id=>$(id).addEventListener('input',drawUnc));
+drawUnc();
+
+/* ---------- TOOL 5: comparator ---------- */
+let CMP=[
+ {n:'Solargis',ghi:2045,gti:2240,dev:true},
+ {n:'Meteonorm',ghi:1990,gti:2175,dev:false},
+ {n:'PVGIS (SARAH-3)',ghi:2060,gti:2255,dev:false},
+ {n:'NREL NSRDB',ghi:2072,gti:2270,dev:false},
+ {n:'NASA POWER',ghi:2115,gti:2310,dev:false},
+ {n:'Site measured (QC, 1 yr)',ghi:2010,gti:2200,dev:false}
+];
+let cRefIdx=0;
+function cmpRender(){
+  const par=$('cPar').value==='GHI'?'ghi':'gti'; const g=+$('cG').value/100, a=Math.max(+$('cA').value/100,g);
+  $('cGV').textContent='±'+(g*100).toFixed(1)+'%'; $('cAV').textContent='±'+(a*100).toFixed(1)+'%';
+  const refSel=$('cRef'); const prev=refSel.value; refSel.innerHTML=CMP.map((c,i)=>`<option value="${i}">${c.n}</option>`).join('');
+  refSel.value = prev!=='' && +prev<CMP.length ? prev : String(Math.min(cRefIdx,CMP.length-1)); cRefIdx=+refSel.value;
+  const ref=CMP[cRefIdx]?CMP[cRefIdx][par]:NaN;
+  const vals=CMP.map(c=>c[par]).filter(x=>isFinite(x)&&x>0).sort((x,y)=>x-y);
+  const med=vals.length?(vals.length%2?vals[(vals.length-1)/2]:(vals[vals.length/2-1]+vals[vals.length/2])/2):NaN;
+  const mean=vals.reduce((p,q)=>p+q,0)/vals.length; const sd=Math.sqrt(vals.reduce((p,q)=>p+(q-mean)**2,0)/Math.max(1,vals.length-1));
+  const flag=d=>Math.abs(d)<=g?'<span class="pill g">Within band</span>':Math.abs(d)<=a?'<span class="pill a">Review</span>':'<span class="pill r">Outlier</span>';
+  let t=`<tr><th>Source</th><th class="num">${par.toUpperCase()} (kWh/m²/yr)</th><th class="num">vs reference</th><th class="num">vs median</th><th>Flag</th><th>Developer</th><th></th></tr>`;
+  CMP.forEach((c,i)=>{const d=c[par]/ref-1, dm=c[par]/med-1;
+    t+=`<tr><td><input type="text" data-i="${i}" data-k="n" value="${c.n.replace(/"/g,'&quot;')}"></td><td class="num"><input type="number" data-i="${i}" data-k="${par}" value="${c[par]}"></td><td class="num">${i===cRefIdx?'<span class="pill n">ref</span>':pct(d)}</td><td class="num">${pct(dm)}</td><td>${flag(dm)}</td><td><input type="radio" name="cdev" data-i="${i}" ${c.dev?'checked':''}></td><td><button class="ghost" data-del="${i}" style="padding:2px 8px">×</button></td></tr>`;});
+  $('cTable').innerHTML=t;
+  $('cTable').querySelectorAll('input[type=text],input[type=number]').forEach(el=>el.addEventListener('change',e=>{const i=+el.dataset.i,k=el.dataset.k;CMP[i][k]=k==='n'?el.value:+el.value;cmpRender();}));
+  $('cTable').querySelectorAll('input[type=radio]').forEach(el=>el.addEventListener('change',()=>{CMP.forEach((c,i)=>c.dev=i===+el.dataset.i);cmpRender();}));
+  $('cTable').querySelectorAll('button[data-del]').forEach(b=>b.addEventListener('click',()=>{if(CMP.length<=2)return;CMP.splice(+b.dataset.del,1);if(cRefIdx>=CMP.length)cRefIdx=0;refSel.value='';cmpRender();}));
+  $('cMed').textContent=fmt(med); $('cSpread').textContent=fmt(vals[vals.length-1]-vals[0])+' ('+((vals[vals.length-1]-vals[0])/med*100).toFixed(1)+'%)';
+  $('cCov').textContent=(sd/mean*100).toFixed(1)+'%';
+  const dv=CMP.find(c=>c.dev); const dd=dv?dv[par]/med-1:NaN; $('cDev').textContent=pct(dd);
+  // rank
+  let msg='';
+  if(dv){const rank=[...CMP].sort((x,y)=>y[par]-x[par]).findIndex(c=>c===dv)+1;
+    msg=`<b>Interpretation.</b> The developer's source (${dv.n}) is ${pct(dd)} vs the median of ${CMP.length} sources and ranks #${rank} of ${CMP.length} (1 = most optimistic). `;
+    if(Math.abs(dd)<=g) msg+='It sits within the green band — the resource basis looks consistent with independent sources.';
+    else if(dd>0) msg+= Math.abs(dd)<=a ? 'It is on the optimistic side; ask for justification (site adaptation, validation) and test energy at the median value.' : 'It is materially optimistic; a resource haircut towards the consensus or measured value should be considered.';
+    else msg+='It is conservative relative to the pack — low risk for lenders, but check the sponsor is not under-valuing the asset.';}
+  const nasa=CMP.find(c=>/nasa/i.test(c.n)); if(nasa&&Math.abs(nasa[par]/med-1)>a) msg+=' Note: screening-grade sources (e.g. NASA POWER) commonly sit outside the band and should be excluded from the median if they distort it.';
+  $('cMsg').innerHTML=msg;
+  // chart
+  const w=760,h=40+CMP.length*30,ml=170,mr=80,mt=10,pw=w-ml-mr;
+  const mn=Math.min(...vals,ref)*0.985, mx=Math.max(...vals,ref)*1.01; const X=x=>ml+(x-mn)/(mx-mn)*pw; let s='';
+  s+=`<rect x="${X(med*(1-a))}" y="${mt}" width="${X(med*(1+a))-X(med*(1-a))}" height="${CMP.length*30}" fill="${C.sun}" opacity="0.08"/>`;
+  s+=`<rect x="${X(med*(1-g))}" y="${mt}" width="${X(med*(1+g))-X(med*(1-g))}" height="${CMP.length*30}" fill="${C.green}" opacity="0.10"/>`;
+  s+=`<line x1="${X(med)}" x2="${X(med)}" y1="${mt}" y2="${mt+CMP.length*30}" stroke="#16191d" stroke-dasharray="4 3"/><text x="${X(med)}" y="${h-6}" font-size="11" text-anchor="middle" fill="#16191d">median ${fmt(med)}</text>`;
+  CMP.forEach((c,i)=>{const y=mt+i*30+15;s+=`<text x="${ml-10}" y="${y+4}" font-size="12" text-anchor="end" fill="${c.dev?C.accent:C.muted}" font-weight="${c.dev?700:400}">${c.n.length>24?c.n.slice(0,23)+'…':c.n}</text><line x1="${ml}" x2="${X(c[par])}" y1="${y}" y2="${y}" stroke="${C.line}" stroke-width="2"/><circle cx="${X(c[par])}" cy="${y}" r="${c.dev?7:5}" fill="${c.dev?C.accent:C.accent2}"/><text x="${X(c[par])+10}" y="${y+4}" font-size="11" fill="${C.muted}">${fmt(c[par])}</text>`;});
+  $('cChart').innerHTML=svgEl(w,h,s);
+}
+$('cRef').addEventListener('change',()=>{cRefIdx=+$('cRef').value;cmpRender();});
+['cPar','cG','cA'].forEach(id=>$(id).addEventListener('input',cmpRender));
+$('cAdd').addEventListener('click',()=>{const med=CMP[0];CMP.push({n:'New source',ghi:med.ghi,gti:med.gti,dev:false});cmpRender();});
+cmpRender();
+
+/* ---------- TOOL 6: Our View ---------- */
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+let OV={
+  refDb:[138,152,196,214,228,201,163,158,176,172,143,130],
+  refMs:[134,148,190,208,219,189,156,155,171,167,138,126],
+  tgtDb:[140,155,199,217,231,206,168,162,179,175,145,132]
+};
+function distF(d){return d<=25?1:d<=50?0.9:d<=100?0.75:d<=150?0.5:0.3;}
+function elevF(e){return e<=150?1:e<=300?0.9:0.75;}
+function ovRender(){
+  const sum=a=>a.reduce((p,q)=>p+(+q||0),0);
+  const ratios=OV.refMs.map((m,i)=>m/OV.refDb[i]);
+  const bias=sum(OV.refMs)/sum(OV.refDb)-1;
+  const rMean=ratios.reduce((a,b)=>a+b)/12; const rSd=Math.sqrt(ratios.reduce((a,b)=>a+(b-rMean)**2,0)/11);
+  const dist=+$('oDist').value, el=+$('oElev').value;
+  const f={dist:distF(dist),elev:elevF(el),zone:+$('oZone').value,yrs:+$('oYrs').value,sens:+$('oSens').value,qc:+$('oQc').value,plane:+$('oPlane').value};
+  let score=f.dist*f.elev*f.zone*f.yrs*f.sens*f.qc*f.plane;
+  const consF = rSd<=0.02?1:rSd<=0.04?0.9:0.75; score*=consF;
+  const wgt=Math.min(1,score);
+  const tdb=sum(OV.tgtDb); const tov=tdb*(1+wgt*bias);
+  $('oBias').textContent=pct(bias); $('oCons').textContent=(rSd*100).toFixed(1)+'%';
+  $('oScore').textContent=Math.round(score*100)+' / 100';
+  $('oTdb').textContent=fmt(tdb); $('oTov').textContent=fmt(tov); $('oDelta').textContent=pct(tov/tdb-1);
+  $('oFormula').textContent=
+`Bias          = Σ measured_ref / Σ database_ref − 1 = ${fmt(sum(OV.refMs))} / ${fmt(sum(OV.refDb))} − 1 = ${pct(bias,2)}
+Confidence    = dist ${f.dist} × elev ${f.elev} × zone ${f.zone} × years ${f.yrs} × sensor ${f.sens} × QC ${f.qc} × plane ${f.plane} × consistency ${consF} = ${score.toFixed(2)}
+Our View      = database_target × (1 + confidence × bias) = ${fmt(tdb)} × (1 + ${score.toFixed(2)} × ${pct(bias,2)}) = ${fmt(tov)} kWh/m²`;
+  let t=`<tr><th>Month</th><th class="num">Database @ reference plant</th><th class="num">Measured @ reference plant</th><th class="num">Ratio</th><th class="num">Database @ target</th><th class="num">Our View @ target</th></tr>`;
+  MON.forEach((m,i)=>{t+=`<tr><td>${m}</td><td class="num"><input type="number" data-k="refDb" data-i="${i}" value="${OV.refDb[i]}"></td><td class="num"><input type="number" data-k="refMs" data-i="${i}" value="${OV.refMs[i]}"></td><td class="num">${(ratios[i]).toFixed(3)}</td><td class="num"><input type="number" data-k="tgtDb" data-i="${i}" value="${OV.tgtDb[i]}"></td><td class="num">${fmt(OV.tgtDb[i]*(1+wgt*bias),1)}</td></tr>`;});
+  t+=`<tr style="font-weight:700"><td>Year</td><td class="num">${fmt(sum(OV.refDb))}</td><td class="num">${fmt(sum(OV.refMs))}</td><td class="num">${(1+bias).toFixed(3)}</td><td class="num">${fmt(tdb)}</td><td class="num">${fmt(tov)}</td></tr>`;
+  $('oTable').innerHTML=t;
+  $('oTable').querySelectorAll('input').forEach(inp=>inp.addEventListener('change',()=>{OV[inp.dataset.k][+inp.dataset.i]=+inp.value;ovRender();}));
+  // chart: grouped bars + ratio line
+  const w=760,h=250,ml=46,mr=50,mt=18,mb=28,pw=w-ml-mr,ph=h-mt-mb; const gw=pw/12;
+  const mx=Math.max(...OV.refDb,...OV.refMs)*1.08; const Y=v=>mt+ph-v/mx*ph;
+  const rlo=Math.min(...ratios,0.94), rhi=Math.max(...ratios,1.03); const YR=r=>mt+ph-(r-rlo)/(rhi-rlo)*ph;
+  let s='';
+  for(let i=0;i<=4;i++){const v=mx*i/4;s+=`<line x1="${ml}" x2="${ml+pw}" y1="${Y(v)}" y2="${Y(v)}" stroke="${C.line}"/><text x="${ml-6}" y="${Y(v)+4}" font-size="10.5" text-anchor="end" fill="${C.faint}">${Math.round(v)}</text>`;}
+  MON.forEach((m,i)=>{const x=ml+i*gw;s+=`<rect x="${x+4}" y="${Y(OV.refDb[i])}" width="${gw/2-5}" height="${mt+ph-Y(OV.refDb[i])}" fill="${C.faint}" opacity=".45" rx="2"/><rect x="${x+gw/2+1}" y="${Y(OV.refMs[i])}" width="${gw/2-5}" height="${mt+ph-Y(OV.refMs[i])}" fill="${C.accent}" opacity=".85" rx="2"/><text x="${x+gw/2}" y="${h-10}" font-size="10.5" text-anchor="middle" fill="${C.faint}">${m}</text>`;});
+  const rp=ratios.map((r,i)=>(i?'L':'M')+(ml+i*gw+gw/2)+','+YR(r)).join(' ');
+  s+=`<line x1="${ml}" x2="${ml+pw}" y1="${YR(1)}" y2="${YR(1)}" stroke="${C.sun}" stroke-dasharray="3 3"/><text x="${ml+pw+4}" y="${YR(1)+4}" font-size="10.5" fill="${C.sun}">ratio 1.00</text>`;
+  s+=`<path d="${rp}" fill="none" stroke="${C.sun}" stroke-width="2"/>`+ratios.map((r,i)=>`<circle cx="${ml+i*gw+gw/2}" cy="${YR(r)}" r="3" fill="${C.sun}"/>`).join('');
+  s+=`<text x="${ml}" y="11" font-size="11.5" fill="${C.muted}">Reference plant: <tspan fill="${C.faint}">■ database</tspan>  <tspan fill="${C.accent}">■ measured</tspan>  <tspan fill="${C.sun}">— measured / database ratio</tspan></text>`;
+  $('oChart').innerHTML=svgEl(w,h,s);
+  let msg=`<b>Reading the result.</b> At the reference plant the database ${bias<0?'over':'under'}-predicts measured sunlight by ${Math.abs(bias*100).toFixed(1)}%. With a confidence of ${Math.round(score*100)}/100, Our View for the target is ${fmt(tov)} kWh/m², ${pct(tov/tdb-1)} vs the database. `;
+  if(score<0.4) msg+='Confidence is low — present this as indicative supporting evidence, not as a correction.';
+  else if(score<0.7) msg+='Moderate confidence — present as a range alongside the database value and flag the direction of risk.';
+  else msg+='Good confidence — this can support a recommended adjustment to the developer\u2019s resource assumption.';
+  if(rSd>0.04) msg+=' The monthly ratio swings widely; check sensor cleaning and monsoon months before relying on the annual figure.';
+  $('oMsg').innerHTML=msg;
+}
+['oDist','oElev','oZone','oYrs','oSens','oQc','oPlane'].forEach(id=>$(id).addEventListener('input',ovRender));
+ovRender();
+
+/* ---------- checklist ---------- */
+const chks=[...document.querySelectorAll('#checklist input')];
+function chkUpd(){$('chkCount').textContent=chks.filter(c=>c.checked).length+' of '+chks.length+' items complete';}
+chks.forEach(c=>c.addEventListener('change',chkUpd));chkUpd();
+
+/* ---------- glossary ---------- */
+const GL=[
+['AOD (Aerosol Optical Depth)','How much aerosols (dust, smoke, pollution) attenuate sunlight. High and variable AOD is India\u2019s main source of satellite-model error.'],
+['Albedo','Fraction of light reflected by the ground. Affects GTI and especially bifacial gain.'],
+['BSRN','Baseline Surface Radiation Network — a global set of very high-quality reference stations used to validate models.'],
+['CAMS','Copernicus Atmosphere Monitoring Service — supplies aerosol and water-vapour data used by satellite irradiance models.'],
+['Clear-sky model','Calculates irradiance under cloud-free sky from sun position, aerosols and water vapour; the starting point of satellite models.'],
+['Clipping loss','Energy lost when DC power exceeds inverter AC rating. Underestimated with hourly data at high DC/AC ratios.'],
+['DHI','Diffuse Horizontal Irradiance — scattered sky light on a horizontal surface.'],
+['DNI','Direct Normal Irradiance — beam light on a surface facing the sun.'],
+['GHI','Global Horizontal Irradiance — total light on a horizontal surface.'],
+['GTI / POA','Global Tilted Irradiance / Plane-of-Array — light on the module plane.'],
+['IAV (Inter-annual variability)','Year-to-year standard deviation of annual irradiation. Averages down by √N over N years.'],
+['Irradiance vs irradiation','Irradiance is power (W/m²); irradiation is energy over time (kWh/m²).'],
+['Isotropic / Hay / Perez','Transposition models for diffuse light on a tilted plane. Perez is the common PVsyst default and gives a higher circumsolar contribution than isotropic.'],
+['Meteosat IODC','Meteosat satellite positioned over the Indian Ocean; source imagery for most satellite irradiance over India.'],
+['MCP / Site adaptation','Correcting a long-term satellite series using overlapping on-site measurements, reducing long-term resource uncertainty.'],
+['P50 / P90 / P99','Energy levels exceeded with 50%, 90% and 99% probability. Lenders size debt mainly on P90.'],
+['Pyranometer class (ISO 9060)','Class A (best), B, C for thermopile pyranometers. Class A with good maintenance gives roughly ±2% annual GHI uncertainty.'],
+['Reanalysis','Weather-model output corrected with observations (ERA5, MERRA-2). Coarse for irradiance.'],
+['Reference cell','Silicon sensor that measures irradiance like a PV cell; spectrally and angularly different from a pyranometer.'],
+['Root-sum-square','Method for combining independent uncertainties: square each, add, take the square root.'],
+['RMBD / RMSD','Relative mean bias deviation (systematic error) and relative root-mean-square deviation (scatter) of a model versus measurements.'],
+['SARAH-3','CM SAF satellite irradiance climate data record used in PVGIS.'],
+['Soiling','Dust on modules (or sensors) reducing light; significant in arid Indian sites. A dirty sensor makes measured irradiance look low.'],
+['Time series','Year-by-year recorded or modelled data at fixed time steps.'],
+['TMY','Typical Meteorological Year — one representative year assembled from typical months. P50 TMY, P90 TMY and synthetic TMY are variants.'],
+['Transposition','Converting horizontal irradiance (GHI, DHI) into plane-of-array irradiance (GTI).']
+];
+function glRender(){const q=$('glSearch').value.trim().toLowerCase();$('glList').innerHTML=GL.filter(([k,v])=>!q||k.toLowerCase().includes(q)||v.toLowerCase().includes(q)).map(([k,v])=>`<div class="gl-item"><b>${k}</b><br><span>${v}</span></div>`).join('')||'<p class="muted">No match.</p>';}
+$('glSearch').addEventListener('input',glRender);glRender();
+</script>
+</body>
+</html>
